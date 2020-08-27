@@ -1,18 +1,41 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+      <GeneralHeader/>
+    <text-editor></text-editor>
   </div>
 </template>
-
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+// import * as firebase from "firebase/app";
+// import "firebase/auth";
+import { db } from "@/firebase";
+import TextEditor from '@/components/TextEditor'
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+  components:{
+    TextEditor,
+  },
+  data() {
+    return {
+      name: "this",
+    };
+  },
+  firestore() {
+    return {
+      user: db.collection("user"),
+    };
+  },
+  methods: {
+    show() {
+      console.log(this.$route.path != '/admin');
+    },
+  },
+};
 </script>
+
+
+<style lang="scss" scoped>
+.heroImage {
+  width: 150px;
+  height: 150px;
+}
+</style>
