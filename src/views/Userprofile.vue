@@ -1,7 +1,8 @@
 <template>
   <v-container>
-  <GeneralHeader/>
-    <v-card class="mt-3" color="grey lighten-5" flat>
+    <GeneralHeader />
+
+    <v-card class="mt-3" flat>
       <v-row>
         <v-col lg="4" xl="4" sm="12" md="4" align="center" class="mx-auto">
           <v-avatar size="200px" class="ma-3">
@@ -9,8 +10,8 @@
             <v-img v-else :src="image"></v-img>
           </v-avatar>
         </v-col>
-        <v-col lg="8" xl="8" md="8" sm="12" class="md-mt-8 text-center">
-          <div class="heading">{{name}}</div>
+        <v-col cols="12" class="sm-mt-8 text-center">
+          <h2 class="NameOfUser">{{name}}</h2>
           <v-card-subtitle>
             <v-skeleton-loader
               v-if="!email"
@@ -39,9 +40,9 @@
           </v-card-text>
         </v-col>
       </v-row>
-      
     </v-card>
-    <v-alert type="success" class="mt-3">Helloo I am here for you to</v-alert>
+    <!--<v-alert type="success" class="mt-3">Helloo I am here for you to</v-alert>
+    -->
     <ProfileSetting />
   </v-container>
 </template>
@@ -97,4 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.NameOfUser {
+  font-weight: 350;
+}
 </style>

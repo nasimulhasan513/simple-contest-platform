@@ -1,35 +1,29 @@
 <template>
   <div class="container">
-      <GeneralHeader/>
-    <text-editor></text-editor>
+    <GeneralHeader />
+    <v-row align="center" justify="center">
+      <v-col cols="4" sm="12" md="4" xl="3">
+        <v-card class="gray-10" tile align="center">
+          <img class="heroImage mt-3" src="@/assets/images/book.png" />
+          <!-- <v-card-title class="text-center title">Read</v-card-title> -->
+        </v-card>
+      </v-col>
+      <v-col cols="4" sm="12" md="4" xl="3">
+        <v-card align="center">
+          <img class="heroImage mt-3" src="@/assets/images/contest.png" />
+          <!-- <v-card-title class="text-center title">Read</v-card-title> -->
+        </v-card>
+      </v-col>
+      <v-col cols="4" sm="12" md="4" xl="3">
+        <v-card align="center">
+          <img class="heroImage mt-3" src="@/assets/images/trophy.png" />
+          <!-- <v-card-title class="text-center title">Read</v-card-title> -->
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script>
-// import * as firebase from "firebase/app";
-// import "firebase/auth";
-import { db } from "@/firebase";
-import TextEditor from '@/components/TextEditor'
-
-export default {
-  components:{
-    TextEditor,
-  },
-  data() {
-    return {
-      name: "this",
-    };
-  },
-  firestore() {
-    return {
-      user: db.collection("user"),
-    };
-  },
-  methods: {
-    show() {
-      console.log(this.$route.path != '/admin');
-    },
-  },
-};
 </script>
 
 

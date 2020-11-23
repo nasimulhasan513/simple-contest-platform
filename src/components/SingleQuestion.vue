@@ -1,20 +1,21 @@
 <template>
   <v-container class="mt-2">
-  <GeneralHeader/>
+    <GeneralHeader />
     <v-card class="grey lighten-5 pa-2 mx-2">
       <v-card-title>
         <h2 class="questiontitle">{{questionTitle}}</h2>
         <v-spacer></v-spacer>
-        <div class="languagefield">
+        <div class="py-8"></div>
+        <!--<div class="languagefield">
           <v-select :items="languages" label="Language" outlined dense rounded v-model="slang"></v-select>
-        </div>
+        </div>-->
       </v-card-title>
       <v-card-subtitle class="subtitle">
-        <v-chip small>Score: {{point}}</v-chip>
-        <v-chip class="mx-2" small>#ID: {{id}}</v-chip>
+        <v-chip x-small>Score: {{point}}</v-chip>
+        <v-chip class="mx-2" x-small>#ID: {{id}}</v-chip>
       </v-card-subtitle>
       <v-card-text class="questionbox">
-        <span v-html="questionDescription" class="mt-4"></span>
+        <div v-html="questionDescription" class="mt-4"></div>
       </v-card-text>
     </v-card>
     <v-sheet rounded width="300px" class="mx-auto mt-5">
@@ -28,7 +29,18 @@
           append-icon="mdi-send"
           class="answerField mx-auto ma-2"
         ></v-text-field>
-        <v-btn @click="submitAns" color="success" :loading="loading" large tile>Submit</v-btn>
+        <v-btn
+          @click="submitAns"
+          v-if="this.$store.getters.loginstatus"
+          color="success"
+          :loading="loading"
+          large
+          tile
+        >Submit</v-btn>
+        <v-btn dark v-else to="/login">
+          Login to submit
+          <v-icon>mdi-lock</v-icon>
+        </v-btn>
       </div>
     </v-sheet>
     <v-row justify="center">

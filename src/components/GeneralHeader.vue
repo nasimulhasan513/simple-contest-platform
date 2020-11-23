@@ -9,11 +9,10 @@
           <v-icon>{{nav.icon}}</v-icon>
           {{nav.title}}
         </v-btn>
-      </div>      
-        <v-btn text large :to="this.userStatus ? '/user' : '/login'">
-        <v-icon>mdi-account-circle</v-icon>
-        Account
-        </v-btn>
+      </div>
+      <v-btn text large :to="this.userStatus ? '/user' : '/login'">
+        <v-icon>mdi-account-circle</v-icon>Account
+      </v-btn>
     </v-app-bar>
     <v-app-bar app class="hidden-md-and-up grey lighten-3">
       <v-app-bar-nav-icon @click="sidebar = !sidebar"></v-app-bar-nav-icon>
@@ -32,8 +31,17 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-account-circle</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                <router-link :to="this.userStatus ? '/user' : '/login'" class="MobileLink">Account</router-link>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list-item-group>
-        <v-btn>Account</v-btn>
       </v-list>
     </v-navigation-drawer>
   </v-sheet>
@@ -61,11 +69,6 @@ export default {
           title: "Leaderboard",
           to: "/leaderboard",
         },
-        // {
-        //   icon: "mdi-account-circle",
-        //   title: "Account",
-        //   to: this.userStatus ? '/user' : '/login',
-        // },
       ],
       sidebar: false,
     };

@@ -1,61 +1,128 @@
 <template>
-  <v-card>
-    <v-toolbar flat dark>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-      <v-toolbar-title>Details</v-toolbar-title>
-    </v-toolbar>
-    <v-tabs vertical>
-      <v-tab>
-        <v-icon left>mdi-account</v-icon>Option 1
-      </v-tab>
-      <v-tab>
-        <v-icon left>mdi-lock</v-icon>Option 2
-      </v-tab>
-      <v-tab>
-        <v-icon left>mdi-access-point</v-icon>Option 3
-      </v-tab>
+  <v-card color="basil" class="my-3">
+    <v-card-title class="text-center justify-center py-6">
+      <h1 class="font-weight-bold display-1">Overview</h1>
+    </v-card-title>
 
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <p>Sed aliquam ultrices mauris. Donec posuere vulputate arcu. Morbi ac felis. Etiam feugiat lorem non metus. Sed a libero.</p>
-
-            <p>Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel, lacus. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Aliquam lobortis. Aliquam lobortis. Suspendisse non nisl sit amet velit hendrerit rutrum.</p>
-
-            <p
-              class="mb-0"
-            >Phasellus dolor. Fusce neque. Fusce fermentum odio nec arcu. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Phasellus blandit leo ut odio.</p>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <p>Morbi nec metus. Suspendisse faucibus, nunc et pellentesque egestas, lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Sed mollis, eros et ultrices tempus, mauris ipsum aliquam libero, non adipiscing dolor urna a orci. Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Nunc sed turpis.</p>
-
-            <p>Suspendisse feugiat. Suspendisse faucibus, nunc et pellentesque egestas, lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In hac habitasse platea dictumst. Fusce ac felis sit amet ligula pharetra condimentum.</p>
-
-            <p>Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Nam commodo suscipit quam. In consectetuer turpis ut velit. Sed cursus turpis vitae tortor. Aliquam eu nunc.</p>
-
-            <p>Etiam ut purus mattis mauris sodales aliquam. Ut varius tincidunt libero. Aenean viverra rhoncus pede. Duis leo. Fusce fermentum odio nec arcu.</p>
-
-            <p
-              class="mb-0"
-            >Donec venenatis vulputate lorem. Aenean viverra rhoncus pede. In dui magna, posuere eget, vestibulum et, tempor auctor, justo. Fusce commodo aliquam arcu. Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec, nisi.</p>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <p>Fusce a quam. Phasellus nec sem in justo pellentesque facilisis. Nam eget dui. Proin viverra, ligula sit amet ultrices semper, ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In dui magna, posuere eget, vestibulum et, tempor auctor, justo.</p>
-
-            <p
-              class="mb-0"
-            >Cras sagittis. Phasellus nec sem in justo pellentesque facilisis. Proin sapien ipsum, porta a, auctor quis, euismod ut, mi. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nam at tortor in tellus interdum sagittis.</p>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
+    <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
+      <v-tab v-for="item in items" :key="item">{{ item }}</v-tab>
     </v-tabs>
+
+    <v-tabs-items v-model="tab">
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <v-simple-table v-if="solved.length!=0">
+              <thead>
+                <tr>
+                  <th class="text-left">Questions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="a in solved" :key="a">
+                  <td>{{a}}</td>
+                </tr>
+              </tbody>
+            </v-simple-table>
+            <p v-else>You solved no question yet!</p>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <v-simple-table v-if="unsolved.length!=0">
+              <thead>
+                <tr>
+                  <th class="text-left">Questions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="a in unsolved" :key="a">
+                  <td>{{a}}</td>
+                </tr>
+              </tbody>
+            </v-simple-table>
+            <p v-else>Well Done! You have no remaining Attempts.</p>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <v-card-text>
+            <p>under construction</p>
+            <v-row>
+              <v-col cols="12">
+                <v-col>
+                  <v-text-field label="Name" outlined />
+                </v-col>
+                <v-col>
+                  <v-text-field label="Address" outlined />
+                </v-col>
+              </v-col>
+            </v-row>
+            <v-btn class="info" large block>Update</v-btn>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
   </v-card>
-</template> 
+</template>
+
+
+<script>
+import { db } from "@/firebase";
+export default {
+  data() {
+    return {
+      tab: null,
+      items: ["Submissions", "Attempts in", "Account"],
+      unsolved: [],
+      solved: [],
+    };
+  },
+  created() {
+    let solvedq = [];
+    let usolvedq = [];
+    const docRef = db.collection("user").get();
+    const qRef = db.collection("shortQuestions").get();
+    docRef
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.id == this.$store.getters.getUser.uid) {
+            solvedq = doc.data().solved;
+            usolvedq = doc.data().unsolved;
+          }
+        });
+      })
+      .then(() => {
+        qRef.then((snapshot) => {
+          snapshot.forEach((q) => {
+            solvedq.forEach((s) => {
+              if (s == q.id) {
+                this.solved.push(q.data().questionTitle);
+              }
+            });
+            usolvedq.forEach((s) => {
+              if (s == q.id) {
+                console.log(q.data().questionTitle);
+                this.unsolved.push(q.data().questionTitle);
+              }
+            });
+          });
+        });
+      });
+  },
+};
+</script>
+
+
+<style>
+/* Helper classes */
+.basil {
+  background-color: #f1eeee !important;
+}
+.basil--text {
+  color: #356859 !important;
+}
+</style>

@@ -34,10 +34,12 @@
 
 
 <script>
-import {db} from '@/firebase'
-
+import { db } from "@/firebase";
+import SubjectList from "@/components/SubjectList";
 export default {
-  layout: "admin",
+  components: {
+    SubjectList,
+  },
   data() {
     return {
       dialog: false,
@@ -45,22 +47,24 @@ export default {
       subClass: "",
     };
   },
-  firestore(){
+  firestore() {
     return {
-      subjects: db.collection('subjects')
-    }
+      subjects: db.collection("subjects"),
+    };
   },
-  methods:{
-      addSubject(){
-      this.dialog = false
-      this.$firestore.subjects.add({
-        subjectName: this.subjectName,
-        subjectClass: this.subClass
-      }).then(()=>{
-        this.subjectName = ''
-          this.subClass = ''
-      })
-  }
-  }
+  methods: {
+    addSubject() {
+      this.dialog = false;
+      this.$firestore.subjects
+        .add({
+          subjectName: this.subjectName,
+          subjectClass: this.subClass,
+        })
+        .then(() => {
+          this.subjectName = "";
+          this.subClass = "";
+        });
+    },
+  },
 };
 </script>

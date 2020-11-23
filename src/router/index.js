@@ -6,6 +6,9 @@ import Register from '../views/Register.vue'
 import UserProfile from '../views/Userprofile.vue'
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import {
+  db
+} from '@/firebase'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -34,7 +37,7 @@ const routes = [{
   {
     path: '/user',
     name: 'UserProfile',
-    component: UserProfile
+    component: UserProfile,
   },
   {
     path: '/submissions',
@@ -62,7 +65,7 @@ const routes = [{
     path: '/admin',
     component: () => import('@/views/dashboard/Index'),
     meta: {
-      requiresAuth: true
+      requiresadminAuth: true
     },
     children: [
       // Dashboard
@@ -75,6 +78,9 @@ const routes = [{
       {
         name: 'User Profile',
         path: 'account',
+        meta: {
+          authrize: ['student']
+        },
         component: () => import('@/views/dashboard/pages/UserProfile'),
       },
       {
@@ -93,7 +99,7 @@ const routes = [{
         component: () => import( /* webpackChunkName: "admin" */ '../views/admin/questions/index.vue')
       },
       {
-        path: '/subjects',
+        path: 'subjects',
         name: 'Subjects',
         component: () => import( /* webpackChunkName: "admin" */ '../views/admin/subjects/index.vue')
       },
@@ -102,7 +108,7 @@ const routes = [{
         path: 'components/typography',
         component: () => import('@/views/dashboard/component/Typography'),
       },
-      // Tables
+      // Users
       {
         name: 'Users',
         path: 'users',
@@ -120,9 +126,25 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresadminAuth = to.matched.some(record => record.meta.requiresadminAuth)
   const isAuthenticated = firebase.auth().currentUser;
   if (requiresAuth && !isAuthenticated) {
     next('/login')
+  } else if (requiresadminAuth) {
+    if (isAuthenticated) {
+      db.collection('user').get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            if (doc.id == isAuthenticated.uid) {
+              if (doc.data().role == 'admin') {
+                next()
+              } else {
+                next('/')
+              }
+            }
+          });
+        })
+    }
   } else {
     next()
   }

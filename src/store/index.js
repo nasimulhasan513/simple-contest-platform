@@ -15,12 +15,12 @@ export default new Vuex.Store({
     barColor: 'rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)',
     barImage: 'https://demos.creative-tim.com/material-dashboard/assets/img/sidebar-1.jpg',
     drawer: null,
+    role: null,
   },
   mutations: {
     SET_USER(state, payload) {
       state.user = payload;
     },
-
     SET_ERROR(state, payload) {
       state.error = payload;
     },
@@ -48,6 +48,7 @@ export default new Vuex.Store({
         .then(() => {
           const authUser = firebase.auth().currentUser;
           commit("SET_USER", authUser);
+
           db.collection("user")
             .doc(authUser.uid)
             .set({
@@ -57,7 +58,7 @@ export default new Vuex.Store({
               role: "student",
               solved: [],
               unsolved: [],
-            });
+            })
         })
         .catch((error) => {
           commit("SET_ERROR", error);
@@ -73,6 +74,7 @@ export default new Vuex.Store({
         .then(() => {
           let user = firebase.auth().currentUser;
           commit("SET_USER", user);
+          this.$route.replace("/");
         })
 
         .catch((err) => {
@@ -105,7 +107,7 @@ export default new Vuex.Store({
               }
             })
             .then(() => {
-             this.$router.replace("/");
+              this.$route.replace("/");
             });
         })
         .catch((error) => {
