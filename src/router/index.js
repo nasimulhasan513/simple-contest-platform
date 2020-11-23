@@ -44,8 +44,20 @@ const routes = [{
     name: 'Submissions',
     component: () => import("../views/SubmissionPanel.vue")
   },
-
-
+  {
+    path: '/academic',
+    name: 'Academic',
+    component: () => import("../views/userSubjects.vue")
+  },
+  {
+    path: '/academic/:subject',
+    name: 'AcademicSubjects',
+    component: () => import("../views/academic/Lessons.vue")
+  }, {
+    path: '/academic/:subject/:lesson',
+    name: 'AcademicSubjectsLessons',
+    component: () => import("../views/academic/SingleLesson.vue")
+  },
 
   {
     path: '/questions',
@@ -103,18 +115,25 @@ const routes = [{
         name: 'Subjects',
         component: () => import( /* webpackChunkName: "admin" */ '../views/admin/subjects/index.vue')
       },
-      {
-        name: 'Typography',
-        path: 'components/typography',
-        component: () => import('@/views/dashboard/component/Typography'),
-      },
+
       // Users
       {
         name: 'Users',
         path: 'users',
         component: () => import('@/views/admin/users.vue'),
       },
-
+      {
+        path: 'academic',
+        component: () => import("../views/admin/academic/Subjects.vue")
+      }, {
+        path: 'academic/:subject',
+        name: 'adminAcademicSubject',
+        component: () => import("../views/admin/academic/Lessons.vue")
+      },
+      {
+        path: 'academic/:subject/:lesson',
+        component: () => import('../views/admin/academic/singleLesson.vue')
+      }
     ],
   },
 ]
@@ -139,14 +158,32 @@ router.beforeEach((to, from, next) => {
               if (doc.data().role == 'admin') {
                 next()
               } else {
-                next('/')
+                next({
+                  path: '/',
+                  query: {
+                    redirect: to.fullPath
+                  }
+                })
+
               }
             }
           });
         })
+    } else {
+      next('/')
     }
   } else {
     next()
   }
 })
 export default router
+
+
+
+
+// const requiresadminAuth = to.matched.some(
+  //   (record) => record.meta.requireAdminAuth
+  // );
+  // const requireOwnerAuth = to.matched.some(
+  //   (record) => record.meta.requireOwnerAuth
+  // );

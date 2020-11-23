@@ -1,8 +1,8 @@
-<template>
+<template><userLayouts>
   <v-container>
     <GeneralHeader />
 
-    <v-card class="mt-3" flat>
+    <v-card class="mt-n12" flat>
       <v-row>
         <v-col lg="4" xl="4" sm="12" md="4" align="center" class="mx-auto">
           <v-avatar size="200px" class="ma-3">
@@ -44,15 +44,16 @@
     <!--<v-alert type="success" class="mt-3">Helloo I am here for you to</v-alert>
     -->
     <ProfileSetting />
-  </v-container>
+  </v-container></userLayouts>
 </template>
 
 <script>
 import ProfileSetting from "@/components/ProfileSetting";
 import { db } from "@/firebase";
+import userLayouts from '@/layouts/userLayouts'
 export default {
   components: {
-    ProfileSetting,
+    ProfileSetting,userLayouts
   },
   data() {
     return {
@@ -91,6 +92,7 @@ export default {
       if (value) {
         this.email = value.email;
         this.name = value.displayName;
+        this.image = value.photoURL
       }
     },
   },

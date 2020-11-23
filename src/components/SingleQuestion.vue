@@ -1,8 +1,8 @@
 <template>
   <v-container class="mt-2">
     <GeneralHeader />
-    <v-card class="grey lighten-5 pa-2 mx-2">
-      <v-card-title>
+    <v-card class="grey lighten-5 lg-ma-2">
+      <v-card-title class="mt-md-3">
         <h2 class="questiontitle">{{questionTitle}}</h2>
         <v-spacer></v-spacer>
         <div class="py-8"></div>
@@ -37,6 +37,7 @@
           large
           tile
         >Submit</v-btn>
+
         <v-btn dark v-else to="/login">
           Login to submit
           <v-icon>mdi-lock</v-icon>
@@ -65,6 +66,7 @@
                     :items="['Spelling','Answer']"
                     label="Report Type"
                     type="password"
+                    v-model="reportType"
                     required
                   ></v-select>
                 </v-col>
@@ -82,17 +84,6 @@
         </v-card>
       </v-dialog>
     </v-row>
-
-    <!-- <v-row>
-      <v-col>
-        <v-card>
-          <v-card-title>Submissions</v-card-title>
-          <v-list>
-            <v-list-item>Hello</v-list-item>
-          </v-list>
-        </v-card>
-      </v-col>
-    </v-row>-->
   </v-container>
 </template>
 
@@ -127,6 +118,7 @@ export default {
       slang: "",
       dialog: false,
       reportDetails: "",
+      reportType:'',
       answerMatch: "",
       loading: false,
     };
@@ -134,9 +126,19 @@ export default {
   firestore() {
     return {
       user: db.collection("user"),
+      submissions: db.collection("submissions"),
+      reports: db.collection('reports')
     };
   },
   methods: {
+    report(){
+      this.$firestore.add({
+        name: this.$store.getters.getUser.displayName,
+        id: this.$store.getters.getUser.uid,
+        reportType: this.reportType,
+        reportDetails: this.reportDetails
+      })
+    },
     submitAns() {
       this.loading = true;
       let check = this.answer.includes(this.answerMatch);
@@ -158,17 +160,41 @@ export default {
                 parseInt(questionData.point)
               ),
             });
-            console.log(questionData);
-          } else {
-            alert("correct");
           }
+          this.$swal({
+            title: "Good job!",
+            text: "You solved successfully!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            this.$router.replace("/submissions");
+          });
         } else if (doc.data().solved.includes(questionData.id)) {
-          alert("Sorry! your previous answer was correct");
+          this.$swal({
+            title: "Sorry!",
+            text: "Your previous answer was correct",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         } else {
           dataRef.update({
             unsolved: firebase.firestore.FieldValue.arrayUnion(questionData.id),
           });
+          this.$swal({
+            title: "Sorry!",
+            text: "Try Again",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
+      });
+      this.$firestore.submissions.add({
+        name: this.userName,
+        time: parseInt(Date.now()),
+        status: check,
       });
       this.loading = false;
     },
@@ -176,6 +202,9 @@ export default {
   computed: {
     userId() {
       return this.$store.getters.getUser.uid;
+    },
+    userName() {
+      return this.$store.getters.getUser.displayName;
     },
   },
 };

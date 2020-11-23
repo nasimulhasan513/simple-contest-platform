@@ -1,6 +1,7 @@
 <template>
+<userLayouts>
   <v-container class="m-auto">
-  <GeneralHeader/>
+
     <v-card>
       <v-card-title primary-title>
         <h2 class="regtitle">Create An Account</h2>
@@ -57,11 +58,13 @@
         </v-form>
       </v-card-text>
     </v-card>
-  </v-container>
+  </v-container></userLayouts>
 </template>
 <script>
+import userLayouts from '@/layouts/userLayouts'
 export default {
-  // middleweare: 'unauth',
+  components: {userLayouts},
+
   data: () => ({
     show: false,
     valid: true,
@@ -94,7 +97,6 @@ export default {
     register() {
       if (this.checkbox) {
         this.$store.dispatch('userRegistration', this.userData)
-        this.$router.push('/')
       }
     },
     reset() {

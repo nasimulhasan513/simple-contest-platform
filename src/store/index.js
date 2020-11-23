@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import router from '@/router'
 import {
   db
 } from "@/firebase";
@@ -59,6 +60,8 @@ export default new Vuex.Store({
               solved: [],
               unsolved: [],
             })
+        }).then(() => {
+          router.push('/')
         })
         .catch((error) => {
           commit("SET_ERROR", error);
@@ -74,18 +77,19 @@ export default new Vuex.Store({
         .then(() => {
           let user = firebase.auth().currentUser;
           commit("SET_USER", user);
-          this.$route.replace("/");
+        }).then(() => {
+          router.push('/')
         })
 
         .catch((err) => {
           commit("SET_ERROR", err);
         });
     },
-    loginWithGoogle({
+    async loginWithGoogle({
       commit
     }) {
       commit("SET_ERROR", "");
-      firebase
+      await firebase
         .auth()
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then((res) => {
@@ -105,10 +109,9 @@ export default new Vuex.Store({
                   unsolved: [],
                 });
               }
+            }).then(() => {
+              router.push('/')
             })
-            .then(() => {
-              this.$route.replace("/");
-            });
         })
         .catch((error) => {
           commit("SET_ERROR", error);
@@ -117,6 +120,7 @@ export default new Vuex.Store({
     logOut() {
       firebase.auth().signOut();
     },
+    
 
   },
   getters: {

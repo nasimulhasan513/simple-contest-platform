@@ -1,6 +1,6 @@
 <template>
   <v-sheet style="margin-bottom: 75px">
-    <v-app-bar class="grey lighten-2" app flat>
+    <v-app-bar app flat>
       <v-toolbar-title class="MobileTitle">Contest Jam</v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -14,33 +14,34 @@
         <v-icon>mdi-account-circle</v-icon>Account
       </v-btn>
     </v-app-bar>
-    <v-app-bar app class="hidden-md-and-up grey lighten-3">
-      <v-app-bar-nav-icon @click="sidebar = !sidebar"></v-app-bar-nav-icon>
-      <v-toolbar-title class="MobileTitle mx-auto">Contest Jam</v-toolbar-title>
+    <v-app-bar app class="hidden-md-and-up">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title class="MobileTitle">
+        <router-link to="/" class="MobileLink">Contest Jam</router-link>
+      </v-toolbar-title>
     </v-app-bar>
-    <v-navigation-drawer class="hidden-md-and-up" v-model="sidebar" absolute temporary>
-      <v-list>
-        <v-list-item-group>
-          <v-list-item v-for="(nav, i) in navs" :key="i">
-            <v-list-item-icon>
-              <v-icon v-text="nav.icon"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
+    <v-navigation-drawer v-model="drawer" app temporary>
+      <div class="MobileTitle mt-4 ml-5 mb-n4">
+        <router-link to="/" class="MobileLink">Contest Jam</router-link>
+      </div>
+      <v-list nav dense class="mt-3">
+        <v-list-item-group v-model="group">
+          <router-link v-for="nav in navs" :key="nav.title" :to="nav.to" class="MobileLink">
+            <v-list-item class="pa-3">
               <v-list-item-title>
-                <router-link :to="nav.to" class="MobileLink">{{nav.title}}</router-link>
+                <v-icon class="ma-2">{{nav.icon}}</v-icon>
+                {{nav.title}}
               </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-account-circle</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
+            </v-list-item>
+          </router-link>
+
+          <router-link :to="this.userStatus ? '/user' : '/login'" class="MobileLink">
+            <v-list-item class="pa-3">
               <v-list-item-title>
-                <router-link :to="this.userStatus ? '/user' : '/login'" class="MobileLink">Account</router-link>
+                <v-icon class="ma-2">mdi-account-circle</v-icon>Account
               </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+            </v-list-item>
+          </router-link>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -50,27 +51,39 @@
 <script>
 export default {
   name: "GeneralHeader",
+
   data() {
     return {
+      drawer: false,
+      group: null,
       navs: [
         {
           icon: "mdi-home",
           title: "Home",
           to: "/",
         },
-
+        {
+          icon: "mdi-book-open",
+          title: "Academic",
+          to: "/academic",
+        },
         {
           icon: "mdi-help-network",
           title: "Questions",
           to: "/questions",
         },
+
         {
           icon: "mdi-chart-bar",
           title: "Leaderboard",
           to: "/leaderboard",
         },
+        {
+          icon: "mdi-book",
+          title: "Submissions",
+          to: "/submissions",
+        },
       ],
-      sidebar: false,
     };
   },
   computed: {
@@ -78,15 +91,11 @@ export default {
       return this.$store.getters.loginstatus;
     },
   },
-  // watch: {
-  //   userStatus(value) {
-  //     if (value) {
-  //       this.userData = true;
-  //     } else {
-  //       this.userData = false;
-  //     }
-  //   },
-  // },
+  watch: {
+    group() {
+      this.drawer = false;
+    },
+  },
 };
 </script>
 
@@ -103,6 +112,6 @@ export default {
 }
 .MobileLink {
   text-decoration: none;
-  color: black;
+  color: rgb(26, 26, 26);
 }
 </style>

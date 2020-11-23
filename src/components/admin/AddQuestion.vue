@@ -26,7 +26,8 @@
         v-model="questionDescription"
         :options="editorOption"
         class="my-3 mb-7 QuillEditor"
-        ref="editor" />
+        ref="editor"
+      />
       <v-text-field
         shaped
         outlined
@@ -53,8 +54,8 @@
 <script>
 import AddQuizQuestion from "@/components/admin/AddQuizQuestion";
 import { db } from "@/firebase";
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
+import katex from "katex";
+import "katex/dist/katex.min.css";
 export default {
   components: {
     AddQuizQuestion,
@@ -80,7 +81,7 @@ export default {
           toolbar: [
             ["bold", "italic", "underline", "strike"],
             ["blockquote", "code-block"],
-            ["formula"],
+            ["formula", "image"],
           ],
         },
       },
@@ -113,27 +114,6 @@ export default {
         this.availableSubjects.push(subject.subjectName);
       });
     },
-    sanitizeTitle(title) {
-      var slug = "";
-      // Change to lower case
-      var titleLower = title.toLowerCase();
-      // Letter "e"
-      slug = titleLower.replace(/e|é|è|ẽ|ẻ|ẹ|ê|ế|ề|ễ|ể|ệ/gi, "e");
-      // Letter "a"
-      slug = slug.replace(/a|á|à|ã|ả|ạ|ă|ắ|ằ|ẵ|ẳ|ặ|â|ấ|ầ|ẫ|ẩ|ậ/gi, "a");
-      // Letter "o"
-      slug = slug.replace(/o|ó|ò|õ|ỏ|ọ|ô|ố|ồ|ỗ|ổ|ộ|ơ|ớ|ờ|ỡ|ở|ợ/gi, "o");
-      // Letter "u"
-      slug = slug.replace(/u|ú|ù|ũ|ủ|ụ|ư|ứ|ừ|ữ|ử|ự/gi, "u");
-      // Letter "d"
-      slug = slug.replace(/đ/gi, "d");
-      // Trim the last whitespace
-      slug = slug.replace(/\s*$/g, "");
-      // Change whitespace to "-"
-      slug = slug.replace(/\s+/g, "-");
-
-      return slug;
-    },
     submit() {
       let ShortQuestion = {
         slug: String(this.shortQuestions.length + 1),
@@ -156,15 +136,13 @@ export default {
     },
   },
   mounted() {
-      
     window.katex = katex;
-    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
-.QuillEditor{
+.QuillEditor {
   min-height: 200px;
   max-height: 400px;
   overflow: auto;

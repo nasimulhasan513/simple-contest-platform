@@ -19,15 +19,10 @@
 
     <v-list dense nav>
       <v-list-item>
-        <v-list-item-avatar class="align-self-center" color="white" contain>
-          <v-img
-            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-            max-height="30"
-          />
-        </v-list-item-avatar>
+        <v-list-item-avatar class="align-self-center" color="white" contain></v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title class="display-1" v-text="profile.title" />
+          <v-list-item-title class>{{this.$store.getters.getUser.displayName}}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -103,9 +98,9 @@ export default {
         to: "/admin/users",
       },
       {
-        title: "Notifications",
-        icon: "mdi-bell",
-        to: "/components/notifications",
+        title: "Books",
+        icon: "mdi-book-play",
+        to: "/admin/academic",
       },
     ],
   }),

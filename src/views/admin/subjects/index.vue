@@ -14,6 +14,14 @@
               <v-col cols="12">
                 <v-text-field v-model="subjectName" label="Subject Name*" required></v-text-field>
                 <v-text-field v-model="subClass" label="Class*" required></v-text-field>
+                <input type="file" @change="uploadImage" />
+
+                <div v-if="image">
+                  <v-btn @click="deleteImage" class="DeleteImage">
+                    <v-icon>fa fa-trash-alt</v-icon>
+                  </v-btn>
+                  <v-img :src="image" width="250"></v-img>
+                </div>
               </v-col>
             </v-row>
           </v-container>
@@ -27,7 +35,7 @@
       </v-card>
     </v-dialog>
     <v-col cols="12">
-      <SubjectList :subjectslist="subjects" />
+      <SubjectList :subjectslist="subjects" @deleteSub="deleteSubject"/>
     </v-col>
   </v-row>
 </template>
@@ -35,6 +43,7 @@
 
 <script>
 import { db } from "@/firebase";
+import firebase from "@/firebase";
 import SubjectList from "@/components/SubjectList";
 export default {
   components: {
@@ -45,6 +54,13 @@ export default {
       dialog: false,
       subjectName: "",
       subClass: "",
+      image: "",
+      rules: [
+        (value) =>
+          !value ||
+          value.size < 2000000 ||
+          "Avatar size should be less than 2 MB!",
+      ],
     };
   },
   firestore() {
@@ -53,18 +69,75 @@ export default {
     };
   },
   methods: {
+    deleteSubject(sub){
+      console.log(sub);
+      this.$firestore.subjects.doc(sub.id).delete()
+      this.deleteImage(sub.subjecticon)
+    },
+    deleteImage(img) {
+      let image = firebase.storage().refFromURL(img);
+
+      image
+        .delete()
+        .then(function () {
+          console.log("image deleted");
+        })
+        .catch(function (error) {
+          // Uh-oh, an error occurred!
+          console.log("an error occurred", error);
+        });
+    },
+    uploadImage(e) {
+      if (e.target.files[0]) {
+        let file = e.target.files[0];
+        console.log(file);
+        var storageRef = firebase
+          .storage()
+          .ref("subjects/" + Math.random() + "_" + file.name);
+
+        let uploadTask = storageRef.put(file);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            console.log(snapshot);
+          },
+          (error) => {
+            console.log(error);
+            // Handle unsuccessful uploads
+          },
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              this.image = downloadURL;
+            });
+          }
+        );
+      }
+    },
     addSubject() {
       this.dialog = false;
       this.$firestore.subjects
         .add({
           subjectName: this.subjectName,
           subjectClass: this.subClass,
+          subjecticon: this.image,
         })
         .then(() => {
           this.subjectName = "";
           this.subClass = "";
+          this.image = "";
         });
     },
   },
 };
 </script>
+
+
+<style lang="scss" scoped>
+.deleteImage {
+  position: relative;
+}
+</style>

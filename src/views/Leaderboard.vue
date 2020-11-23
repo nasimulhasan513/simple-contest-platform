@@ -1,6 +1,7 @@
 <template>
+<userLayouts>
   <div>
-  <GeneralHeader/>
+
   <v-container class="mt-2">
     <v-row>
       <v-col cols="12" class="d-flex">
@@ -40,13 +41,17 @@
       </template>
     </v-simple-table>
   </v-container>
-  </div>
+  </div></userLayouts>
 </template>
 
 
 <script>
 import { db } from "@/firebase";
+import userLayouts from '@/layouts/userLayouts'
 export default {
+  components:{
+    userLayouts
+  },
   firestore() {
     return {
       user: db.collection("user").orderBy("score", "desc"),

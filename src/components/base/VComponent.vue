@@ -1,8 +1,6 @@
 <template>
   <section class="mb-12 text-center">
     <h1 class="font-weight-light mb-2 headline" v-text="heading" />
-
-    <span class="font-weight-light subtitle-1">Manage All User From One Place</span>
   </section>
 </template>
 
